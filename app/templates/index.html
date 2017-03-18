@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>Друзья онлайн</title>
+    </head>
+    <body style='text-align: center'>
+        <p>{{ welcome_text }}</p>
+        {% if not logged_in %}
+        <a href={{ auth_url }}><button>Войти</button></a>
+        {% endif %}
+        {% if user_url_form is not none %}
+        <form action='' method='post' name='user_url_form'>
+            {{ user_url_form.hidden_tag() }}
+            <p>Вставь ссылку на пользователя:<br/></p>
+            <p>{{ user_url_form.user_url(size=45) }}</p>
+            <p><input type='submit' value='Показать'/></p>
+        </form>
+        {% for error in user_url_form.user_url.errors %}
+        <p>{{ error }}<br/></p>
+        {% endfor %}
+        {% endif %}
+        {% if online_friends is not none %}
+        <ul>
+            {% for friend in online_friends %}
+            <li>
+                <a href={{ friend['url'] }}>{{ friend['name'] }}</a>
+                {% if friend['mobile'] %}
+                (десктоп)
+                {% else %}
+                (мобильный)
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% if logged_in %}
+        <a href={{ logout_url }}><button>Выйти</button></a>
+        {% endif %}
+    </body>
+</html>
