@@ -26,6 +26,7 @@ def index():
 
     if params['user_url_form'].validate_on_submit():
         user_url = params['user_url_form'].data
+        raise ValueError(user_url)
         user_id = friends_online.extract_user_id_from_url(user_url)
         params['online_friends'] = friends_online.fetch_online_friends(access_token, 
                                                                        user_id)
