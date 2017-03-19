@@ -13,7 +13,7 @@ def fetch_online_friends(access_token, user_id=None):
     online_mobile_ids = online_friend_ids['online_mobile']
     online_friends = []
     for online_id in online_desktop_ids + online_mobile_ids:
-        user = fetch_user(access_token, user_id=online_id)
+        user = fetch_user(access_token, online_id)
         name = ' '.join((user['first_name'], user['last_name']))
         online_friends.append({'name': name,
                                'url': 'https://vk.com/id%d' % online_id,
