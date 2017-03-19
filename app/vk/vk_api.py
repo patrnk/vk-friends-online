@@ -62,6 +62,7 @@ def fetch_user(access_token, username=None, name_case='nom'):
 def fetch_friend_list(access_token, user_id=None):
     params = {'user_id': user_id,
               'access_token': access_token,
+              'fields': 'nickname'
               }
     friend_list = make_vk_api_request('friends.get', **params)['response']['items']
     return friend_list
