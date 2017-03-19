@@ -7,4 +7,6 @@ class UserUrlForm(FlaskForm):
     _validators = [Length(min=0, max=50, 
                           message='Ссылка не должна быть длиннее 50 символов.'),
                    ]
-    user_url = StringField('user_url', validators=_validators) 
+    _placeholder = 'Твой профиль по умолчанию'
+    user_url = StringField('user_url', validators=_validators, 
+                           render_kw={'placeholder': _placeholder}) 

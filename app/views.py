@@ -21,7 +21,7 @@ def index():
         return render_template('index.html', **params)
 
     params['logged_in'] = True
-    params['welcome_text'] = 'Привет, %s! Кого будем сталкерить?' % session['username']
+    params['welcome_text'] = 'Привет, %s!' % session['username']
     params['user_url_form'] = UserUrlForm()
     access_token = escape(session['access_token'])
 

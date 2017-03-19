@@ -1,46 +1,102 @@
-<html>
+<!DOCTYPE html>
+<html lang=en>
     <head>
         <title>Друзья онлайн</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <style>
+          body {
+              padding-top: 60px; 
+              background: #f9f9f9;
+          }
+        </style>
     </head>
-    <body style='text-align: center'>
-        <p>{{ welcome_text }}</p>
-        {% if not logged_in %}
-        <a href={{ auth_url }}><button>Войти</button></a>
-        {% endif %}
-        {% if user_url_form is not none %}
-        <form action='' method='post' name='user_url_form'>
-            {{ user_url_form.hidden_tag() }}
-            <p>Вставь ссылку на пользователя:<br/></p>
-            <p>{{ user_url_form.user_url(size=45) }}</p>
-            <p><input type='submit' value='Показать'/></p>
-        </form>
-        {% for error in user_url_form.user_url.errors %}
-        <p>{{ error }}<br/></p>
-        {% endfor %}
-        {% endif %}
-        {% if target_name is not none %}
-        <p>Друзья онлайн у {{ target_name }}:</p>
-        {% endif %}
-        {% if online_friends is not none %}
-            {% if not online_friends %}
-            <p> Нет друзей онлайн. </p>
-            {% else %}
-            <ul>
-                {% for friend in online_friends %}
-                <li>
-                    <a href={{ friend['url'] }}>{{ friend['name'] }}</a>
-                    {% if friend['mobile'] %}
-                    (мобильный)
-                    {% else %}
-                    (десктоп)
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <h3>{{ welcome_text }}</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1 col-md-offset-5">
+                    {% if not logged_in %}
+                    <a href={{ auth_url }}><button class="btn btn-default">Войти</button></a>
                     {% endif %}
-                </li>
-                {% endfor %}
-            </ul>
+                </div>
+            </div>
+            {% if user_url_form is not none %}
+            <form action="" method="post" name="user_url_form">
+                {{ user_url_form.hidden_tag() }}
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <p>Вставь ссылку на пользователя:<br/></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <p>{{ user_url_form.user_url(size=40) }}</p>
+                        <p><input class="btn btn-primary" type="submit" value="Показать друзей онлайн"/></p>
+                    </div>
+                </div>
+            </form>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    {% if logged_in %}
+                    <a href={{ logout_url }}><button class="btn btn-danger">Выйти</button></a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row"><br/></div>
+            {% for error in user_url_form.user_url.errors %}
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="alert alert-danger">
+                        {{ error }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
             {% endif %}
-        {% endif %}
-        {% if logged_in %}
-        <a href={{ logout_url }}><button>Выйти</button></a>
-        {% endif %}
+            {% if target_name is not none %}
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <h4>Друзья {{ target_name }} онлайн:</h4>
+                </div>
+            </div>
+            {% endif %}
+            {% if online_friends is not none %}
+            {% if not online_friends %}
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="alert alert-info">
+                        Нет друзей онлайн.
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="list-group">
+                        {% for friend in online_friends %}
+                        <a target="_blank" href={{ friend['url'] }} class="list-group-item">
+                            {{ friend['name'] }}
+                            {% if friend['mobile'] %}
+                            <span class="glyphicon glyphicon-phone"></span>
+                            {% else %}
+                            <span class="glyphicon glyphicon-blackboard"></span>
+                            {% endif %}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endif %}
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </body>
 </html>
