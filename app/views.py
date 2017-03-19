@@ -12,8 +12,6 @@ def index():
     params = {'logged_in': False,
               'welcome_text': 'Привет! Сначала нужно войти в ВК.',
               'auth_url': vk_api.form_authorization_url(request.url_root + 'callback'),
-              'user_url_form': None,
-              'online_friends': None,
               'logout_url': url_for('logout')
               }
     if 'username' not in session or 'access_token' not in session:
@@ -25,11 +23,12 @@ def index():
     access_token = escape(session['access_token'])
 
     if params['user_url_form'].validate_on_submit():
-        user_url = params['user_url_form'].data['user_url']
-        username = friends_online.extract_username_from_url(user_url)
-        user = vk_api.fetch_user(access_token, username)
+        target_url = params['user_url_form'].data['user_url']
+        target_username = friends_online.extract_username_from_url(target_url)
+        target = vk_api.fetch_user(access_token, target_username, 'gen')
         params['online_friends'] = friends_online.fetch_online_friends(access_token, 
-                                                                       user['id'])
+                                                                       target['id'])
+        params['target_name'] = ' '.join((target['first_name'], target['last_name']))
 
     return render_template('index.html', **params)
 

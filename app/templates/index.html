@@ -18,6 +18,8 @@
         <p>{{ error }}<br/></p>
         {% endfor %}
         {% endif %}
+        {% if target_name is not none %}
+        <p>Друзья онлайн у {{ target_name }}:</p>
         {% if online_friends is not none %}
         <ul>
             {% for friend in online_friends %}
