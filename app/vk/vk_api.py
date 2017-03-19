@@ -65,7 +65,7 @@ def exchange_code_for_access_token(code, redirect_uri):
 
 def fetch_user(access_token, username=None, name_case='nom'):
     user_list = make_vk_api_request('users.get', access_token=access_token, 
-                user_ids=user_id)['response']
+                user_ids=username)['response']
     if len(user_list) == 0:
         return None
     return user_list[0]
