@@ -22,18 +22,22 @@
         <p>Друзья онлайн у {{ target_name }}:</p>
         {% endif %}
         {% if online_friends is not none %}
-        <ul>
-            {% for friend in online_friends %}
-            <li>
-                <a href={{ friend['url'] }}>{{ friend['name'] }}</a>
-                {% if friend['mobile'] %}
-                (мобильный)
-                {% else %}
-                (десктоп)
-                {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
+            {% if not online_friends %}
+            <p> Нет друзей онлайн. </p>
+            {% else %}
+            <ul>
+                {% for friend in online_friends %}
+                <li>
+                    <a href={{ friend['url'] }}>{{ friend['name'] }}</a>
+                    {% if friend['mobile'] %}
+                    (мобильный)
+                    {% else %}
+                    (десктоп)
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
         {% endif %}
         {% if logged_in %}
         <a href={{ logout_url }}><button>Выйти</button></a>

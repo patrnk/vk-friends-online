@@ -4,6 +4,16 @@ import time
 import requests
 
 
+class ErrorCodes:
+    TOO_MANY_REQUESTS = 6
+    TOO_MANY_TYPICAL_REQUESTS = 9
+    CAPTCHA_NEEDED = 14
+    NO_ACCESS = 15
+    USER_HAS_INVALID_ACCOUNT = 17
+    REQUESTED_USER_DELETED_OR_BANNED = 18
+    USERNAME_IS_INVALID = 113
+
+
 class VkRequestError(Exception): 
     def __init__(self, message, error_code):
         super(Exception, self).__init__('%d: %s' % (error_code, message))
@@ -62,10 +72,12 @@ def fetch_user(access_token, username=None, name_case='nom'):
     return user_list[0]
 
 
-def fetch_friend_list(access_token, user_id=None):
+def fetch_friend_list(access_token, user_id=None, offset=0):
     params = {'user_id': user_id,
               'access_token': access_token,
-              'fields': 'nickname'
+              'fields': 'nickname',  # this way we can get the names of the friends
+              'count': 5000,  # VK won't return more because of 'fields' parameter
+              'offset': offset,
               }
     friend_list = make_vk_api_request('friends.get', **params)['response']['items']
     return friend_list

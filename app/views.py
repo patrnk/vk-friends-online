@@ -28,9 +28,14 @@ def index():
     if params['user_url_form'].validate_on_submit():
         target_url = params['user_url_form'].data['user_url']
         target_username = friends_online.extract_username_from_url(target_url)
-        target = vk_api.fetch_user(access_token, target_username, name_case='gen')
-        params['online_friends'] = friends_online.fetch_online_friends(access_token, 
-                                                                       target['id'])
+        try:
+            target = vk_api.fetch_user(access_token, target_username, name_case='gen')
+            params['online_friends'] = friends_online.fetch_online_friends(access_token, 
+                                                                           target['id'])
+        except vk_api.VkRequestError as ex:
+            error_message = friends_online.get_error_message(ex.error_code)
+            params['user_url_form'].user_url.errors.append(error_message)
+            return render_template('index.html', **params)
         params['target_name'] = ' '.join((target['first_name'], target['last_name']))
 
     return render_template('index.html', **params)
