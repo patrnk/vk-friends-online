@@ -26,9 +26,10 @@ def index():
 
     if params['user_url_form'].validate_on_submit():
         user_url = params['user_url_form'].data['user_url']
-        user_id = friends_online.extract_user_id_from_url(user_url)
+        username = friends_online.extract_username_from_url(user_url)
+        user = vk_api.fetch_user(access_token, username)
         params['online_friends'] = friends_online.fetch_online_friends(access_token, 
-                                                                       user_id)
+                                                                       user['id'])
 
     return render_template('index.html', **params)
 
@@ -41,7 +42,7 @@ def callback():
     redirect_uri = request.url_root + 'callback'  #VK insists it's the same as in index()
     try:
         access_token = vk_api.exchange_code_for_access_token(code, redirect_uri)
-        first_name = vk_api.fetch_user_name(access_token)[0]
+        first_name = vk_api.fetch_user(access_token)['first_name']
         session['access_token'] = access_token
         session['username'] = first_name
     except vk_api.VkRequestError:

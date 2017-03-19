@@ -63,13 +63,12 @@ def exchange_code_for_access_token(code, redirect_uri):
      return response.json().get('access_token', None)
 
 
-def fetch_user_name(access_token, user_id=None):
+def fetch_user(access_token, username=None, name_case='nom'):
     user_list = make_vk_api_request('users.get', access_token=access_token, 
                 user_ids=user_id)['response']
     if len(user_list) == 0:
         return None
-    name = (user_list[0]['first_name'], user_list[0]['last_name'])
-    return name
+    return user_list[0]
 
 
 def fetch_online_friend_ids(access_token, user_id=None, online_mobile=1):
