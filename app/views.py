@@ -22,11 +22,13 @@ def index():
     params['logged_in'] = True
     params['welcome_text'] = 'Привет, %s! Кого будем сталкерить?' % session['username']
     params['user_url_form'] = UserUrlForm()
+    access_token = escape(session['access_token'])
 
     if params['user_url_form'].validate_on_submit():
         user_url = params['user_url_form'].data
         user_id = friends_online.extract_user_id_from_url(user_url)
-        params['online_friends'] = friends_online.fetch_online_friends(user_id)
+        params['online_friends'] = friends_online.fetch_online_friends(access_token, 
+                                                                       user_id)
 
     return render_template('index.html', **params)
 
