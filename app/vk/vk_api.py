@@ -27,18 +27,6 @@ def make_vk_api_request(method, **params):
     return json_response
 
 
-def invoke_with_cooldown(function, **kwargs):
-    too_many_requests_error_code = 6
-    cooldown_seconds = 2
-    try:
-        return function(**kwargs)
-    except VkRequestError as e:
-        if e.error_code != too_many_requests_error_code:
-            raise
-        time.sleep(cooldown_seconds)
-        return function(**kwargs)
-
-
 def form_authorization_url(redirect_uri):
     params = {'client_id': os.environ['CLIENT_ID'],
               'display': 'page',
@@ -69,6 +57,14 @@ def fetch_user(access_token, username=None, name_case='nom'):
     if len(user_list) == 0:
         return None
     return user_list[0]
+
+
+def fetch_friend_list(access_token, user_id=None):
+    params = {'user_id': user_id,
+              'access_token': access_token,
+              }
+    friend_list = make_vk_api_request('friends.get', **params)['response']['items']
+    return friend_list
 
 
 def fetch_online_friend_ids(access_token, user_id=None, online_mobile=1):
