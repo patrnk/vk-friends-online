@@ -24,9 +24,9 @@
             <li>
                 <a href={{ friend['url'] }}>{{ friend['name'] }}</a>
                 {% if friend['mobile'] %}
-                (десктоп)
-                {% else %}
                 (мобильный)
+                {% else %}
+                (десктоп)
                 {% endif %}
             </li>
             {% endfor %}
