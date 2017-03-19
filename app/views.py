@@ -28,6 +28,7 @@ def index():
         user_url = params['user_url_form'].data['user_url']
         username = friends_online.extract_username_from_url(user_url)
         user = vk_api.fetch_user(access_token, username)
+        raise ValueError(user)
         params['online_friends'] = friends_online.fetch_online_friends(access_token, 
                                                                        user['id'])
 
