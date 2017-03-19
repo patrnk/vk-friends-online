@@ -1,8 +1,10 @@
 from .vk_api import fetch_online_friend_ids
 from .vk_api import fetch_user_name
 
+
 def extract_user_id_from_url(user_url):
-    pass
+    last_slash_position = user_url.rfind('/')
+    return user_url[last_slash_position + 1:]
 
 
 def fetch_online_friends(access_token, user_id=None):
