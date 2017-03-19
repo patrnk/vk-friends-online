@@ -19,6 +19,7 @@ def raise_if_vk_error(json_response):
 
 def make_vk_api_request(method, **params):
     method_url = 'https://api.vk.com/method/%s' % method
+    params['v'] = '5.62'
     response = requests.get(method_url, params=params)
     response.raise_for_status()
     json_response = response.json() 
@@ -44,7 +45,6 @@ def form_authorization_url(redirect_uri):
               'redirect_uri': redirect_uri,
               'scope': 'friends',
               'response_type': 'code',
-              'v': '5.62',
               }
     request = requests.Request('GET', 'https://oauth.vk.com/authorize',
                                params=params)
