@@ -18,15 +18,18 @@
         <p>{{ error }}<br/></p>
         {% endfor %}
         {% endif %}
+        {% if target_name is not none %}
+        <p>Друзья онлайн у {{ target_name }}:</p>
+        {% endif %}
         {% if online_friends is not none %}
         <ul>
             {% for friend in online_friends %}
             <li>
                 <a href={{ friend['url'] }}>{{ friend['name'] }}</a>
                 {% if friend['mobile'] %}
-                (десктоп)
-                {% else %}
                 (мобильный)
+                {% else %}
+                (десктоп)
                 {% endif %}
             </li>
             {% endfor %}
