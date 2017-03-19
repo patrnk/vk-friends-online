@@ -34,6 +34,8 @@ def index():
                                                                            target['id'])
         except vk_api.VkRequestError as ex:
             error_message = friends_online.get_error_message(ex.error_code)
+            if error_message is None:
+                raise
             params['user_url_form'].user_url.errors.append(error_message)
             return render_template('index.html', **params)
         params['target_name'] = ' '.join((target['first_name'], target['last_name']))
