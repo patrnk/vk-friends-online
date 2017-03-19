@@ -2,11 +2,19 @@ def extract_user_id_from_url(user_url):
     pass
 
 
-def fetch_online_friends(user_id):
-    friends = [{'name': 'Джон До1', 'url': 'https://vk.com/id1', 'mobile': False},
-               {'name': 'Джон До2', 'url': 'https://vk.com/id2', 'mobile': True}, 
-               {'name': 'Джон До3', 'url': 'https://vk.com/id3', 'mobile': False},
-               {'name': 'Джон До4', 'url': 'https://vk.com/id4', 'mobile': True},
-               {'name': 'Джон До5', 'url': 'https://vk.com/id5', 'mobile': False},
-               ]
-    return friends
+def fetch_online_friends(access_token, user_id=None):
+    online_friend_ids = fetch_online_friend_ids(access_token, user_id)
+    online_desktop_ids = online_friend_ids['online']
+    online_mobile_ids = online_friend_ids['mobile']
+    online_friends = []
+    for online_id in online_desktop_ids:
+        name = fetch_users_first_name(access_token, user_id=online_id)
+        online_friends.append({'name': name, 
+                               'url': 'https://vk.com/id%d' % online_id,
+                               'mobile': False})
+    for online_id in online_mobile_ids:
+        name = fetch_users_first_name(access_token, user_id=online_id)
+        online_friends.append({'name': name, 
+                               'url': 'https://vk.com/id%d' % online_id,
+                               'mobile': True})
+    return online_friends

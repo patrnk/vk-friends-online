@@ -70,3 +70,11 @@ def fetch_users_first_name(access_token, user_id=None):
         return None
     name = user_list[0]['first_name']
     return name
+
+
+def fetch_online_friend_ids(access_token, user_id=None, online_mobile=1):
+    params = {'user_id': user_id, 
+              'online_mobile': 1,  # separate mobile online from desktop online
+              }
+    online_friend_ids = make_vk_api_request('friends.getOnline', **params)
+    return online_friend_ids['response']
