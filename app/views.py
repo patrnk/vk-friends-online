@@ -41,9 +41,9 @@ def callback():
     redirect_uri = request.url_root + 'callback'  #VK insists it's the same as in index()
     try:
         access_token = vk_api.exchange_code_for_access_token(code, redirect_uri)
-        username = vk_api.fetch_users_first_name(access_token)
+        first_name = vk_api.fetch_user_name(access_token)[0]
         session['access_token'] = access_token
-        session['username'] = username
+        session['username'] = first_name
     except vk_api.VkRequestError:
         pass  #TODO: log the exception
     return redirect(url_for('index'))
