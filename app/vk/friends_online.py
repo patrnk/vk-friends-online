@@ -1,3 +1,6 @@
+from .vk_api import fetch_online_friend_ids
+from .vk_api import fetch_users_first_name
+
 def extract_user_id_from_url(user_url):
     pass
 
