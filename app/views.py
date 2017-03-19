@@ -12,7 +12,10 @@ def index():
     params = {'logged_in': False,
               'welcome_text': 'Привет! Сначала нужно войти в ВК.',
               'auth_url': vk_api.form_authorization_url(request.url_root + 'callback'),
-              'logout_url': url_for('logout')
+              'logout_url': url_for('logout'),
+              'user_url_form': None,
+              'online_friends': None,
+              'target_name': None,
               }
     if 'username' not in session or 'access_token' not in session:
         return render_template('index.html', **params)
