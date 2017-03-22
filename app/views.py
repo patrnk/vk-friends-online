@@ -1,8 +1,14 @@
+import logging
+
 from flask import request, redirect, url_for, session, escape, render_template
 from app import app
 
 from . import vk
 from . import forms
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -53,7 +59,7 @@ def callback():
         session['access_token'] = access_token
         session['username'] = first_name
     except vk.VkRequestError:
-        pass  #TODO: log the exception
+        logger.warning('%s: %s', VkRequestError.message, VkRequestError.error_code)
     return redirect(url_for('index'))
 
 
