@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.validators import Length
-from .vk import vk_api
 
 class UserUrlForm(FlaskForm):
     _validators = [Length(min=0, max=50, 

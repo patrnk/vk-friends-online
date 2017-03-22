@@ -1,9 +1,8 @@
 from flask import request, redirect, url_for, session, escape, render_template
 from app import app
 
-from .vk import vk_api
-from .vk import friends_online
-from .forms import UserUrlForm
+from . import vk
+from . import forms
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -11,7 +10,7 @@ from .forms import UserUrlForm
 def index():
     params = {'logged_in': False,
               'welcome_text': 'Привет! Сначала нужно войти в ВК.',
-              'auth_url': vk_api.form_authorization_url(request.url_root + 'callback'),
+              'auth_url': vk.form_authorization_url(request.url_root + 'callback'),
               'logout_url': url_for('logout'),
               'user_url_form': None,
               'online_friends': None,
@@ -22,18 +21,17 @@ def index():
 
     params['logged_in'] = True
     params['welcome_text'] = 'Привет, %s!' % session['username']
-    params['user_url_form'] = UserUrlForm()
+    params['user_url_form'] = forms.UserUrlForm()
     access_token = escape(session['access_token'])
 
     if params['user_url_form'].validate_on_submit():
         target_url = params['user_url_form'].data['user_url']
-        target_username = friends_online.extract_username_from_url(target_url)
+        target_username = vk.extract_username_from_url(target_url)
         try:
-            target = vk_api.fetch_user(access_token, target_username, name_case='gen')
-            params['online_friends'] = friends_online.fetch_online_friends(access_token, 
-                                                                           target['id'])
-        except vk_api.VkRequestError as ex:
-            error_message = friends_online.get_error_message(ex.error_code)
+            target = vk.fetch_user(access_token, target_username, name_case='gen')
+            params['online_friends'] = vk.fetch_online_friends(access_token, target['id'])
+        except vk.VkRequestError as ex:
+            error_message = vk.get_error_message(ex.error_code)
             if error_message is None:
                 raise
             params['user_url_form'].user_url.errors.append(error_message)
@@ -50,11 +48,11 @@ def callback():
         return redirect(url_for('index'))
     redirect_uri = request.url_root + 'callback'  #VK insists it's the same as in index()
     try:
-        access_token = vk_api.exchange_code_for_access_token(code, redirect_uri)
-        first_name = vk_api.fetch_user(access_token)['first_name']
+        access_token = vk.exchange_code_for_access_token(code, redirect_uri)
+        first_name = vk.fetch_user(access_token)['first_name']
         session['access_token'] = access_token
         session['username'] = first_name
-    except vk_api.VkRequestError:
+    except vk.VkRequestError:
         pass  #TODO: log the exception
     return redirect(url_for('index'))
 
