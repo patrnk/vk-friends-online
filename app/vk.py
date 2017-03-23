@@ -15,22 +15,6 @@ class ErrorCodes:
     USERNAME_IS_INVALID = 113
 
 
-def get_error_message(error_code):
-    if (error_code == ErrorCodes.TOO_MANY_REQUESTS or 
-            error_code == ErrorCodes.TOO_MANY_TYPICAL_REQUESTS):
-        return 'Слишком много запросов. Подождите.'
-    if error_code == ErrorCodes.CAPTCHA_NEEDED:
-        return 'ВКонтакте просит ввести капчу. Ничего не можем сделать.'
-    if error_code == ErrorCodes.USER_HAS_INVALID_ACCOUNT:
-        return 'Зайдите на сайт и восстановите свой аккаунт.'
-    if error_code == ErrorCodes.NO_ACCESS:
-        return 'У вас нет доступа к этой странице.'
-    if error_code == ErrorCodes.REQUESTED_USER_DELETED_OR_BANNED:
-        return 'Эта страница удалена или заблокирована.'
-    if error_code == ErrorCodes.USERNAME_IS_INVALID:
-        return 'Пользователя с таким юзернеймом не существует.'
-
-
 class VkRequestError(Exception): 
     ''' Wrapper for these guys: https://vk.com/dev/errors '''
 

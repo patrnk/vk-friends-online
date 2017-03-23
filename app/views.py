@@ -39,7 +39,7 @@ def index():
         except vk.VkRequestError as ex:
             if ex.error_code == vk.ErrorCodes:
                 return redirect(url_for('logout'))
-            error_message = vk.get_error_message(ex.error_code)
+            error_message = get_error_message(ex.error_code)
             if error_message is None:
                 raise
             params['user_url_form'].user_url.errors.append(error_message)
@@ -70,3 +70,19 @@ def logout():
     session.pop('username', None)
     session.pop('access_token', None)
     return redirect(url_for('index'))
+
+
+def get_error_message(error_code):
+    if (error_code == vk.ErrorCodes.TOO_MANY_REQUESTS or 
+            error_code == vk.ErrorCodes.TOO_MANY_TYPICAL_REQUESTS):
+        return 'Слишком много запросов. Подождите.'
+    if error_code == vk.ErrorCodes.CAPTCHA_NEEDED:
+        return 'ВКонтакте просит ввести капчу. Ничего не можем сделать.'
+    if error_code == vk.ErrorCodes.USER_HAS_INVALID_ACCOUNT:
+        return 'Зайдите на сайт и восстановите свой аккаунт.'
+    if error_code == vk.ErrorCodes.NO_ACCESS:
+        return 'У вас нет доступа к этой странице.'
+    if error_code == vk.ErrorCodes.REQUESTED_USER_DELETED_OR_BANNED:
+        return 'Эта страница удалена или заблокирована.'
+    if error_code == vk.ErrorCodes.USERNAME_IS_INVALID:
+        return 'Пользователя с таким юзернеймом не существует.'
