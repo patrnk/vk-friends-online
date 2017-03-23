@@ -8,4 +8,7 @@ class UserUrlForm(FlaskForm):
                    ]
     _placeholder = 'Твой профиль по умолчанию'
     user_url = StringField('user_url', validators=_validators, 
-                           render_kw={'placeholder': _placeholder}) 
+                           render_kw={'placeholder': _placeholder,
+                                      'class': 'form_control col-md-6',
+                                      'autofocus': 'True',
+                                       }) 

@@ -36,7 +36,11 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6 col-md-offset-3">
-                        <p>{{ user_url_form.user_url(size=40) }}</p>
+                        {{ user_url_form.user_url() }}
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px">
+                    <div class="col-md-6 col-md-offset-3">
                         <p><input class="btn btn-primary" type="submit" value="Показать друзей онлайн"/></p>
                     </div>
                 </div>
@@ -48,9 +52,8 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="row"><br/></div>
             {% for error in user_url_form.user_url.errors %}
-            <div class="row">
+            <div class="row" style="margin-top: 20px">
                 <div class="col-md-6 col-md-offset-3">
                     <div class="alert alert-danger">
                         {{ error }}
@@ -60,7 +63,7 @@
             {% endfor %}
             {% endif %}
             {% if target_name is not none %}
-            <div class="row">
+            <div class="row" style="margin-top: 20px">
                 <div class="col-md-6 col-md-offset-3">
                     <h4>Друзья {{ target_name }} онлайн:</h4>
                 </div>
