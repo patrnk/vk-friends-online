@@ -11,8 +11,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
+@app.route('/index', methods=['GET'])
 def index():
     params = {'logged_in': False,
               'welcome_text': 'Привет! Сначала нужно войти в ВК.',
@@ -37,6 +37,8 @@ def index():
             target = vk.fetch_user(access_token, target_username, name_case='gen')
             params['online_friends'] = vk.fetch_online_friends(access_token, target['id'])
         except vk.VkRequestError as ex:
+            if ex.error_code == vk.ErrorCodes:
+                return redirect(url_for('logout'))
             error_message = vk.get_error_message(ex.error_code)
             if error_message is None:
                 raise
@@ -45,6 +47,12 @@ def index():
         params['target_name'] = ' '.join((target['first_name'], target['last_name']))
 
     return render_template('index.html', **params)
+
+
+@app.route('/', methods=['POST'])
+@app.route('/index', methods=['POST'])
+def display_online_friends():
+    pass
 
 
 @app.route('/callback')

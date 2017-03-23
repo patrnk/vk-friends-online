@@ -5,6 +5,7 @@ import requests
 
 
 class ErrorCodes:
+    AUTHORIZATION_FAILED = 5
     TOO_MANY_REQUESTS = 6
     TOO_MANY_TYPICAL_REQUESTS = 9
     CAPTCHA_NEEDED = 14
