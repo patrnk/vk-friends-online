@@ -85,11 +85,6 @@
                         {% for friend in online_friends %}
                         <a target="_blank" href={{ friend['url'] }} class="list-group-item">
                             {{ friend['name'] }}
-                            {% if friend['mobile'] %}
-                            <span class="glyphicon glyphicon-phone"></span>
-                            {% else %}
-                            <span class="glyphicon glyphicon-blackboard"></span>
-                            {% endif %}
                         </a>
                         {% endfor %}
                     </div>
