@@ -46,7 +46,8 @@ def index():
             return redirect(url_for('logout'))
         error_message = get_error_message(ex.error_code)
         if error_message is None:
-            raise
+            logger.error(VkRequestError.message)
+            return redirect(url_for('logout'))
         params['user_url_form'].user_url.errors.append(error_message)
         return render_template('index.html', **params)
     params['target_name'] = ' '.join((target['first_name'], target['last_name']))
@@ -66,7 +67,7 @@ def callback():
         session['access_token'] = access_token
         session['username'] = first_name
     except vk.VkRequestError:
-        logger.warning('%s: %s', VkRequestError.message, VkRequestError.error_code)
+        logger.error(VkRequestError.message)
     return redirect(url_for('index'))
 
 
