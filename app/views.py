@@ -30,21 +30,26 @@ def index():
     params['user_url_form'] = forms.UserUrlForm()
     access_token = escape(session['access_token'])
 
-    if params['user_url_form'].validate_on_submit():
-        target_url = params['user_url_form'].data['user_url']
-        target_username = vk.extract_username_from_url(target_url)
-        try:
-            target = vk.fetch_user(access_token, target_username, name_case='gen')
-            params['online_friends'] = vk.fetch_online_friends(access_token, target['id'])
-        except vk.VkRequestError as ex:
-            if ex.error_code == vk.ErrorCodes:
-                return redirect(url_for('logout'))
-            error_message = get_error_message(ex.error_code)
-            if error_message is None:
-                raise
-            params['user_url_form'].user_url.errors.append(error_message)
-            return render_template('index.html', **params)
-        params['target_name'] = ' '.join((target['first_name'], target['last_name']))
+    if not params['user_url_form'].validate_on_submit():
+        return render_template('index.html', **params)
+
+    target_url = params['user_url_form'].data['user_url']
+    target_username = vk.extract_username_from_url(target_url)
+    try:
+        target = vk.fetch_user(access_token, target_username, name_case='gen')
+        if target is None:
+            raise vk.VkRequestError('No user with username %s' % target_username, 
+                                    vk.ErrorCodes.USERNAME_IS_INVALID)
+        params['online_friends'] = vk.fetch_online_friends(access_token, target['id'])
+    except vk.VkRequestError as ex:
+        if ex.error_code == vk.ErrorCodes:
+            return redirect(url_for('logout'))
+        error_message = get_error_message(ex.error_code)
+        if error_message is None:
+            raise
+        params['user_url_form'].user_url.errors.append(error_message)
+        return render_template('index.html', **params)
+    params['target_name'] = ' '.join((target['first_name'], target['last_name']))
 
     return render_template('index.html', **params)
 
