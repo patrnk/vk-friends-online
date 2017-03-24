@@ -42,7 +42,7 @@ def index():
                                     vk.ErrorCodes.USERNAME_IS_INVALID)
         params['online_friends'] = vk.fetch_online_friends(access_token, target['id'])
     except vk.VkRequestError as ex:
-        if ex.error_code == vk.ErrorCodes:
+        if ex.error_code == vk.ErrorCodes.AUTHORIZATION_FAILED:
             return redirect(url_for('logout'))
         error_message = get_error_message(ex.error_code)
         if error_message is None:
